@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: Serverless REST API for image resizing
+Parameters:
+  imageBucket:
+    Type: String
+    Description: S3 Bucket where original images are placed
+Resources:
+  ResizeFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Image Resizing Lambda
+      Handler: index.handler
+      Runtime: nodejs6.10
+      Timeout: 60
+      CodeUri: dist/bundle.zip
+      MemorySize: 1536
+      Policies:
+        - S3ReadPolicy:
+            BucketName:
+              Ref: imageBucket
+      Events:
+        AuthorizerApiRoot:
+          Properties:
+            Method: GET
+            Path: '/{proxy+}'
+            RestApiId: !Ref Api
+          Type: Api
+      Environment:
+        Variables:
+          IMAGE_BUCKET:
+            Ref: imageBucket
+  Api:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: ImageResizerAPI
+      StageName: production
+      DefinitionBody:
+        swagger: "2.0"
+        schemes:
+        - "https"
+        paths:
+          '/{proxy+}':
+            get:
+              responses: {}
+              x-amazon-apigateway-integration:
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ResizeFunction.Arn}/invocations
+                passthroughBehavior: "when_no_match"
+                httpMethod: "POST"
+                type: aws_proxy
+        x-amazon-apigateway-binary-media-types:
+        - "*/*"

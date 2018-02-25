@@ -1,0 +1,26 @@
+{
+  "name": "image-resize-service",
+  "version": "1.0.0",
+  "description": "Serverless services that resizes an image stored in S3 bucket",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "webpack",
+    "package": "npm run build && aws cloudformation package --template-file template.yaml --output-template-file dist/template-packaged.yml --s3-bucket $CODE_BUCKET",
+    "install-cf": "aws cloudformation deploy --template-file dist/template-packaged.yml --capabilities CAPABILITY_IAM --stack-name image-resizer-rest-api --parameter-overrides imageBucket=$IMAGE_BUCKET",
+    "deploy": "npm run package && npm run install-cf",
+    "local-run": "npm run build && node ./test.js"
+  },
+  "repository": "https://github.com/cagataygurturk/serverless-image-resizer-rest-api",
+  "author": "Cagatay Gurturk <info@cagataygurturk.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "json-loader": "^0.5.7",
+    "webpack": "^4.0.0",
+    "webpack-cli": "^2.0.8",
+    "webpack-zip-files-plugin": "^1.0.0"
+  },
+  "dependencies": {
+    "aws-sdk": "2.190.00",
+    "imagemagick": "^0.1.3"
+  }
+}
