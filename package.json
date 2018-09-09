@@ -15,12 +15,12 @@
   "license": "MIT",
   "devDependencies": {
     "json-loader": "^0.5.7",
-    "webpack": "^4.0.0",
-    "webpack-cli": "^2.0.8",
+    "webpack": "^4.17.2",
+    "webpack-cli": "^2.1.5",
     "webpack-zip-files-plugin": "^1.0.0"
   },
   "dependencies": {
-    "aws-sdk": "2.190.00",
+    "aws-sdk": "^2.311.0",
     "imagemagick": "^0.1.3"
   }
 }
