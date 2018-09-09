@@ -8,6 +8,17 @@ To resize the same image, simply give dimensions as `width` and `height` GET par
 
 After deploying the application, you are strongly recommended to deploy a CDN distribution in front of API Gateway, so your responses are cached and it will improve performance and reduce costs significantly.
 
+## Release Notes
+
+### 0.1.1
+
+- Major refactor, increase test coverage, full ES6 migration.
+- ability to adjust Lambda memmory size.
+
+### 0.1
+
+Initial version
+
 ## License
 
 MIT License (MIT)

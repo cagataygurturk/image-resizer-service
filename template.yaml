@@ -2,23 +2,74 @@ AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
 Description: Serverless REST API for image resizing
 Parameters:
-  imageBucket:
+  ImageBucket:
     Type: String
     Description: S3 Bucket where original images are placed
+  MemorySize:
+    Type: Number
+    Default: 3008
+    Description: Memory size to be used for your Lambda (Note that this setting will increase also the CPU power and price per second.)
+    AllowedValues:
+    - 128
+    - 192
+    - 256
+    - 320
+    - 384
+    - 448
+    - 512
+    - 576
+    - 640
+    - 704
+    - 768
+    - 832
+    - 896
+    - 960
+    - 1024
+    - 1088
+    - 1152
+    - 1216
+    - 1280
+    - 1344
+    - 1408
+    - 1472
+    - 1536
+    - 1600
+    - 1664
+    - 1728
+    - 1792
+    - 1856
+    - 1920
+    - 1984
+    - 2048
+    - 2112
+    - 2176
+    - 2240
+    - 2304
+    - 2368
+    - 2432
+    - 2496
+    - 2560
+    - 2624
+    - 2688
+    - 2752
+    - 2816
+    - 2880
+    - 2944
+    - 3008
 Resources:
   ResizeFunction:
     Type: AWS::Serverless::Function
     Properties:
       Description: Image Resizing Lambda
       Handler: index.handler
-      Runtime: nodejs6.10
+      Runtime: nodejs8.10
       Timeout: 60
       CodeUri: dist/bundle.zip
-      MemorySize: 1536
+      MemorySize: !Ref MemorySize
       Policies:
-        - S3ReadPolicy:
-            BucketName:
-              Ref: imageBucket
+      - S3ReadPolicy:
+          BucketName:
+            Ref: ImageBucket
       Events:
         AuthorizerApiRoot:
           Properties:
@@ -29,7 +80,7 @@ Resources:
       Environment:
         Variables:
           IMAGE_BUCKET:
-            Ref: imageBucket
+            Ref: ImageBucket
   Api:
     Type: AWS::Serverless::Api
     Properties:
