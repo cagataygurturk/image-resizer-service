@@ -1,4 +1,4 @@
-const {errorResponse} = require("../src/response");
+const {errorResponse} = require("./response");
 const url = require('url');
 const {original, resize} = require("./image");
 
