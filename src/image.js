@@ -15,18 +15,18 @@ exports.original = (imageBucket, objectKey) => new Promise((resolve, reject) =>
     getFile(imageBucket, objectKey, reject)
         .then(data => resolve(successResponse(data.Body.toString('base64'), 'image/jpeg'))));
 
-exports.resize = (imageBucket, objectKey, width, height) => new Promise((resolve, reject) =>
+exports.autoOrient = (imageBucket, objectKey) => new Promise((resolve, reject) =>
 
     getFile(imageBucket, objectKey, reject).then(data => {
 
-        const resizedFile = `${os.tmpDir}/resized.${imageBucket}.${objectKey}.${width}.${height}`;
+        const rotatedFile = `${os.tmpDir}/rotated.${imageBucket}.${objectKey}}`;
 
-        const resizeCallback = (err, output, resolve, reject) => {
+        const autoOrientCallback = (err, output, resolve, reject) => {
             if (err) {
                 reject(errorResponse(null, 500, err));
             } else {
                 console.log('INFO: Resize operation completed successfully');
-                im.identify(resizedFile, (err, result) => {
+                im.identify(rotatedFile, (err, result) => {
                     console.log('INFO: MIME type of thumbnail is being identified');
                     let mimeType;
                     switch (result.format) {
@@ -40,27 +40,19 @@ exports.resize = (imageBucket, objectKey, width, height) => new Promise((resolve
                             mimeType = 'image/jpeg';
                     }
 
-                    const response = successResponse(Buffer.from(fs.readFileSync(resizedFile)).toString('base64'), mimeType);
-                    fs.unlink(resizedFile, () => console.log("INFO: Resized file cleaned up"));
+                    const response = successResponse(Buffer.from(fs.readFileSync(rotatedFile)).toString('base64'), mimeType);
+                    fs.unlink(rotatedFile, () => console.log("INFO: Auto Oriented file cleaned up"));
                     resolve(response);
                 });
             }
         };
 
-        if (height) {
-            im.crop({
-                width: width,
-                srcData: data.Body,
-                dstPath: resizedFile,
-                height: height,
-                quality: 1,
-                gravity: "Center"
-            }, (err, output) => resizeCallback(err, output, resolve, reject));
-        } else {
-            im.resize({
-                width: width,
-                srcData: data.Body,
-                dstPath: resizedFile
-            }, (err, output) => resizeCallback(err, output, resolve, reject));
-        }
+        const tempFile = `${os.tmpDir}/${imageBucket}.${objectKey}`
+
+        fs.writeFile(tempFile, data.Body, (err) => {
+            // throws an error, you could also catch it here
+            if (err) throw err;
+
+            im.convert([tempFile, '-auto-orient', '-define', 'jpeg:extent=2000kb', rotatedFile], (err, output) => autoOrientCallback(err, output, resolve, reject));
+        });
     }));
