@@ -1,9 +1,11 @@
 const {errorResponse} = require("./response");
 const url = require('url');
-const {original, resize} = require("./image");
+const { original, autoOrient } = require("./image");
 
 exports.handler = (event) => new Promise((resolve, reject) => {
-    const imageBucket = process.env.IMAGE_BUCKET;
+    const queryParameters = event.queryStringParameters || {};
+
+    const imageBucket = queryParameters.bucket || process.env.IMAGE_BUCKET;
 
     if (!imageBucket) {
         return reject(`Error: Set environment variable IMAGE_BUCKET`);
@@ -13,22 +15,7 @@ exports.handler = (event) => new Promise((resolve, reject) => {
     const objectKey = url.parse(path).pathname.replace(/^\/+/g, '');
     console.log('INFO: key: ' + objectKey);
 
-    const queryParameters = event.queryStringParameters || {};
-
-    if (!queryParameters.width && !queryParameters.height) {
-        return original(imageBucket, objectKey)
-            .then(resolve)
-            .catch(reject);
-    }
-
-    const width = parseInt(queryParameters.width);
-    const height = parseInt(queryParameters.height);
-
-    if ((queryParameters.width && isNaN(width)) || (queryParameters.height && isNaN(height))) {
-        return reject(errorResponse(`width and height parameters must be integer`, 400));
-    }
-
-    return resize(imageBucket, objectKey, width, height)
+    return autoOrient(imageBucket, objectKey)
         .then(resolve)
         .catch(reject);
 });
