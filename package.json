@@ -1,6 +1,6 @@
 {
   "name": "image-resize-service",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Serverless services that resizes an image stored in S3 bucket",
   "main": "src2/index.js",
   "scripts": {
