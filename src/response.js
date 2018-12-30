@@ -10,9 +10,7 @@ const sendResponse = (body, contentType, statusCode, errorMessage) => {
     };
 };
 
-exports.successResponse = (body, contentType) => {
-    return sendResponse(body, contentType, 200);
-};
+exports.successResponse = (body, contentType) => sendResponse(body, contentType, 200);
 
 const onePixelGif = Buffer.from([
     0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00, 0x01, 0x00, 0x80, 0x00, 0x00, 0xFF, 0xFF, 0xFF,
