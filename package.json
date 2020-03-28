@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack",
     "package": "npm run build && aws cloudformation package --template-file template.yaml --output-template-file dist/template-packaged.yml --s3-bucket $CODE_BUCKET",
-    "install-cf": "aws cloudformation deploy --template-file dist/template-packaged.yml --capabilities CAPABILITY_IAM --stack-name image-resizer-rest-api --parameter-overrides ImageBucket=$IMAGE_BUCKET",
+    "install-cf": "aws cloudformation deploy --template-file dist/template-packaged.yml --capabilities CAPABILITY_IAM --stack-name image-resizer-rest-api --parameter-overrides ImageBucket=$IMAGE_BUCKET ImageMagickLayer=arn:aws:lambda:eu-west-1:526515951862:layer:image-magick:1",
     "deploy": "npm run package && npm run install-cf",
     "test": "jest"
   },

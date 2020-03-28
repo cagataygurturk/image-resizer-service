@@ -2,6 +2,9 @@ AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
 Description: Serverless REST API for image resizing
 Parameters:
+  ImageMagickLayer:
+    Type: String
+    Description: ARN of the ImageMagick layer. First install image-magick-lambda-layer application from the Serverless Application Repository to obtain this ARN.
   ImageBucket:
     Type: String
     Description: S3 Bucket where original images are placed
@@ -62,10 +65,12 @@ Resources:
     Properties:
       Description: Image Resizing Lambda
       Handler: index.handler
-      Runtime: nodejs8.10
+      Runtime: nodejs10.x
       Timeout: 60
       CodeUri: dist/bundle.zip
       MemorySize: !Ref MemorySize
+      Layers:
+        - !Ref ImageMagickLayer
       Policies:
       - S3ReadPolicy:
           BucketName:

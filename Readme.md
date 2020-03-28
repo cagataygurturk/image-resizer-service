@@ -6,6 +6,8 @@ The API Gateway respects the file organization on S3 bucket. For example, an ima
 
 To resize the same image, simply give dimensions as `width` and `height` GET parameters.
 
+**IMPORTANT:** This application requires Imagick to be deployed in the Lambda runtime. The easiest way of accomplishing this is to deploy [this](https://eu-west-1.console.aws.amazon.com/lambda/home?region=eu-west-1#/create/app?applicationId=arn:aws:serverlessrepo:us-east-1:145266761615:applications/image-magick-lambda-layer) serverless application. After deploying it, please note down the ARN of the Lambda layer created since this application will require that ARN as a parameter.
+
 After deploying the application, you are strongly recommended to deploy a CDN distribution in front of API Gateway, so your responses are cached and it will improve performance and reduce costs significantly.
 
 ## Release Notes
