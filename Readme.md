@@ -12,6 +12,11 @@ After deploying the application, you are strongly recommended to deploy a CDN di
 
 ## Release Notes
 
+### 0.1.2
+
+- Upgrade to Node 10.x runtime (#9)
+- Better handling of accents or special characters (#6)
+
 ### 0.1.1
 
 - Major refactor, increase test coverage, full ES6 migration.
