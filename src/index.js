@@ -10,7 +10,7 @@ exports.handler = (event) => new Promise((resolve, reject) => {
     }
 
     const path = event.path;
-    const objectKey = url.parse(path).pathname.replace(/^\/+/g, '');
+    const objectKey = decodeURI(url.parse(path).pathname.replace(/^\/+/g, ''));
     console.log('INFO: key: ' + objectKey);
 
     const queryParameters = event.queryStringParameters || {};
