@@ -65,7 +65,7 @@ Resources:
     Properties:
       Description: Image Resizing Lambda
       Handler: index.handler
-      Runtime: nodejs10.x
+      Runtime: nodejs14.x
       Timeout: 60
       CodeUri: dist/bundle.zip
       MemorySize: !Ref MemorySize

@@ -16,7 +16,7 @@ exports.resize = (imageBucket, objectKey, width, height) => new Promise((resolve
     getFile(imageBucket, objectKey, reject).then(data => {
 
         const normalizeObjectKey = objectKey.split('/').join('.');
-        const resizedFile = `${os.tmpDir}/resized.${imageBucket}.${normalizeObjectKey}.${width}.${height}`;
+        const resizedFile = `${os.tmpdir()}/resized.${imageBucket}.${normalizeObjectKey}.${width}.${height}`;
 
         const resizeCallback = (err, output, resolve, reject) => {
             if (err) {
