@@ -12,6 +12,10 @@ After deploying the application, you are strongly recommended to deploy a CDN di
 
 ## Release Notes
 
+### 0.1.4
+
+- Upgrade to Node 14.x runtime
+
 ### 0.1.3
 
 - Upgrade to Node 10.x runtime (#9)
